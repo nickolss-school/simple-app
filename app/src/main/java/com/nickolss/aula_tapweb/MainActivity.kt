@@ -1,5 +1,6 @@
 package com.nickolss.aula_tapweb
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,37 +12,43 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.nickolss.aula_tapweb.ui.theme.AulatapwebTheme
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AulatapwebTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+
+                Scaffold(modifier = Modifier.fillMaxSize()) {
+                    NavHost(navController = navController, startDestination = "login") {
+                        composable("login") {
+                            LoginScreen(
+                                onLogin = { userName ->
+                                    navController.navigate("home/${userName.ifBlank { "Convidado" }}")
+                                },
+                                onRegisterClick = {
+                                    navController.navigate("register")
+                                }
+                            )
+                        }
+                        composable("register") {
+                            RegisterScreen(
+                                onRegisterComplete = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AulatapwebTheme {
-        Greeting("Android")
     }
 }
