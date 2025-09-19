@@ -19,11 +19,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(onLogin: (String) -> Unit, onRegisterClick: () -> Unit) {
     var user by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
+    val auth = remember { FirebaseAuth.getInstance() }
 
     val gradient = Brush.verticalGradient(
         colors = listOf(
@@ -60,7 +64,7 @@ fun LoginScreen(onLogin: (String) -> Unit, onRegisterClick: () -> Unit) {
                 )
 
                 Text(
-                    text = "App Login",
+                    text = "Login",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
@@ -71,7 +75,7 @@ fun LoginScreen(onLogin: (String) -> Unit, onRegisterClick: () -> Unit) {
                 OutlinedTextField(
                     value = user,
                     onValueChange = { user = it },
-                    label = { Text("Usuário") },
+                    label = { Text("Email") },
                     leadingIcon = {
                         Icon(Icons.Filled.Person, contentDescription = null)
                     },
@@ -95,13 +99,39 @@ fun LoginScreen(onLogin: (String) -> Unit, onRegisterClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
-                    onClick = { onLogin(user) },
+                    onClick = {
+                        isLoading = true
+                        errorMessage = null
+                        auth.signInWithEmailAndPassword(user, password)
+                            .addOnCompleteListener { task ->
+                                isLoading = false
+
+                                if(task.isSuccessful){
+                                    onLogin(task.result?.user?.uid ?: user)
+                                } else {
+                                    errorMessage = task.exception?.localizedMessage ?: "Erro desconhecido"
+                                }
+                            }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Logar", fontSize = 16.sp)
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.size(24.dp),
+                        )
+                    } else {
+                        Text("Logar", fontSize = 16.sp)
+                    }
+                }
+
+                errorMessage?.let {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(it, color = MaterialTheme.colorScheme.error, fontSize = 14.sp)
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
