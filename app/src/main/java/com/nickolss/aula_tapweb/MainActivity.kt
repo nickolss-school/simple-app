@@ -73,6 +73,11 @@ class MainActivity : ComponentActivity() {
                         composable("listarProdutos") {
                             ListarProdutosScreen(onBack = { navController.popBackStack() })
                         }
+                        composable("cadastrarProduto") {
+                            CadastrarProdutoScreen(
+                                onRegisterComplete = { navController.popBackStack() }
+                            )
+                        }
                     }
                 }
             }
