@@ -12,9 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.nickolss.aula_tapweb.ui.theme.AulatapwebTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,6 +44,27 @@ class MainActivity : ComponentActivity() {
                             RegisterScreen(
                                 onRegisterComplete = {
                                     navController.popBackStack()
+                                }
+                            )
+                        }
+                        composable(
+                            "home/{userName}",
+                            arguments = listOf(navArgument("userName") {
+                                type = NavType.StringType
+                            })
+                        ) { backStackEntry ->
+                            val userName =
+                                backStackEntry.arguments?.getString("userName") ?: "Usuário"
+                            HomeScreen(
+                                userName = userName,
+                                onCadastrarProduto = {
+                                    navController.navigate("cadastrarProduto")
+                                },
+                                onListarProdutos = {
+                                    navController.navigate("listarProdutos")
+                                },
+                                onLogout = {
+                                    navController.popBackStack("login", inclusive = false)
                                 }
                             )
                         }
