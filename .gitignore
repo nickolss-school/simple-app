@@ -1,0 +1,58 @@
+gitignore
+# Arquivos gerados pelo sistema de build
+build/
+.gradle/
+captures/
+
+# Arquivos locais de configuração do IDE (Android Studio, IntelliJ)
+.idea/
+*.iml
+*.ipr
+*.iws
+local.properties
+
+# Arquivos do Emulador Android
+.android/
+avd/
+*.avd/
+*.ini
+
+# Arquivos de log e temporários
+*.log
+*.tmp
+
+# Arquivos de configuração de debug/release específicos do usuário
+*.keystore
+*.jks
+
+google-services.json
+
+# Arquivos do Firebase Crashlytics (se gerados localmente)
+crashlytics.properties
+crashlytics-build.properties
+com_crashlytics_export_strings.xml
+
+# Arquivos de dependências locais (raro, mas pode acontecer)
+libs/*.jar
+libs/*.aar
+
+# Arquivos do sistema operacional
+.DS_Store # macOS
+Thumbs.db # Windows
+Desktop.ini # Windows
+
+# Arquivos de teste e cobertura (se não quiser versioná-los)
+/app/build/reports/
+/app/build/test-results/
+/app/build/outputs/androidTest-results/
+/app/build/jacoco/
+
+# Arquivos específicos do editor (ex: VSCode)
+.vscode/
+
+# Arquivos gerados pelo Android Studio para projetos Flutter (se aplicável, mas não para o seu projeto atual)
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.dart_tool/
