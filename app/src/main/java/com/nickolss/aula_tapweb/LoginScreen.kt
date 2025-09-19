@@ -108,7 +108,7 @@ fun LoginScreen(onLogin: (String) -> Unit, onRegisterClick: () -> Unit) {
 
                 TextButton(onClick = { onRegisterClick() }) {
                     Text(
-                        "Esqueceu a senha?",
+                        "Não possui cadastro? Cadastre-se",
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 14.sp
                     )
